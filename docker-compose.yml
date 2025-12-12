@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # Backend API Service
+  backend:
+    image: saaya-backend:latest
+    container_name: saaya-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+    networks:
+      - saaya-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend Web Service
+  frontend:
+    image: saaya-frontend:latest
+    container_name: saaya-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - saaya-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  saaya-network:
+    driver: bridge
