@@ -14,7 +14,7 @@ services:
       - saaya-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5000/api/health"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://13.220.122.72:5000/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3

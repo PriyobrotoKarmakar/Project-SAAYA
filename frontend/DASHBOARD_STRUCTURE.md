@@ -298,7 +298,7 @@ cd backend
 npm install
 npm run dev
 ```
-Server starts on: http://localhost:5000
+Server starts on: http://13.220.122.72:5000
 
 **Frontend:**
 ```bash
@@ -311,7 +311,7 @@ Dashboard starts on: http://localhost:5173 (or 5174 if port is in use)
 
 1. **Send Normal Telemetry** (Thunder Client or curl):
 ```json
-POST http://localhost:5000/api/telemetry
+POST http://13.220.122.72:5000/api/telemetry
 {
   "deviceId": "Saaya_001",
   "heartRate": 120,
@@ -323,7 +323,7 @@ Expected: ✅ Green console log "Normal Pulse"
 
 2. **Send SOS Alert**:
 ```json
-POST http://localhost:5000/api/telemetry
+POST http://13.220.122.72:5000/api/telemetry
 {
   "deviceId": "Saaya_002",
   "heartRate": 165,

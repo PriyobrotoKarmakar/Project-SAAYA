@@ -20,9 +20,9 @@ import java.io.InputStreamReader;
 public class SaayaTest {
 
     // Backend API Configuration
-    private final String BACKEND_URL = "http://localhost:5000/api/health";
-    private final String ALERTS_URL = "http://localhost:5000/api/alerts";
-    private final String STATS_URL = "http://localhost:5000/api/stats";
+    private final String BACKEND_URL = "http://13.220.122.72:5000/api/health";
+    private final String ALERTS_URL = "http://13.220.122.72:5000/api/alerts";
+    private final String STATS_URL = "http://13.220.122.72:5000/api/stats";
 
     /**
      * Test 1: Backend Health Check (CRITICAL)

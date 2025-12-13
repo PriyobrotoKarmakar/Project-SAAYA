@@ -29,7 +29,7 @@ qa-suite/
    - Download: https://maven.apache.org/download.cgi
 
 3. **Backend Running**
-   - The Node.js backend must be running on `http://localhost:5000`
+   - The Node.js backend must be running on `http://13.220.122.72:5000`
    - Start with: `cd backend && npm run dev`
 
 ## 🚀 Running Tests
@@ -56,17 +56,17 @@ mvn test
 -------------------------------------------------------
 Running com.saaya.SaayaTest
 🛡️  [Maven QA] Starting Project Saaya Health Check...
-   Target: http://localhost:5000/api/health
+   Target: http://13.220.122.72:5000/api/health
    --> HTTP Response Code: 200
 ✅ [Success] Backend is Healthy. Ready for Cloud Deployment.
 
 🔍 [Maven QA] Testing Alerts API Endpoint...
-   Target: http://localhost:5000/api/alerts
+   Target: http://13.220.122.72:5000/api/alerts
    --> HTTP Response Code: 200
 ✅ [Success] Alerts API is operational.
 
 📊 [Maven QA] Testing Stats API Endpoint...
-   Target: http://localhost:5000/api/stats
+   Target: http://13.220.122.72:5000/api/stats
    --> HTTP Response Code: 200
 ✅ [Success] Stats API is operational.
 

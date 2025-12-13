@@ -17,7 +17,7 @@ function App() {
   const [verifiedAlerts, setVerifiedAlerts] = useState(new Map()); // deviceId -> route info
   
   // Backend API URL (change this to your backend URL)
-  const API_URL = 'http://localhost:5000/api/alerts';
+  const API_URL = 'http://13.220.122.72:5000/api/alerts';
 
   // Fetch alerts from backend
   useEffect(() => {
@@ -193,7 +193,7 @@ function App() {
     // Remove from backend
     try {
       const response = await fetch(
-        `http://localhost:5000/api/alerts/${encodeURIComponent(alert.deviceId)}/${encodeURIComponent(alert.timestamp)}`,
+        `http://13.220.122.72:5000/api/alerts/${encodeURIComponent(alert.deviceId)}/${encodeURIComponent(alert.timestamp)}`,
         { method: 'DELETE' }
       );
       

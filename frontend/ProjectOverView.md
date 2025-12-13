@@ -109,7 +109,7 @@ git clone https://github.com/your-username/project-saaya.git
 cd backend
 npm install
 npm start
-# Server runs on localhost:5000
+# Server runs on 13.220.122.72:5000
 ```
 
 ### Step 2: Launch the Dashboard
