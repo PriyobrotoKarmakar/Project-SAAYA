@@ -1,0 +1,76 @@
+# ================= BACKEND =================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: saaya-backend
+spec:
+  replicas: 2 # Self-Healing: If 1 dies, K8s starts another
+  selector:
+    matchLabels:
+      app: saaya-backend
+  template:
+    metadata:
+      labels:
+        app: saaya-backend
+    spec:
+      containers:
+      - name: saaya-backend
+        image: priyobrotokarmakar/saaya-frontend:latest
+        ports:
+        - containerPort: 5000
+        livenessProbe: # Syllabus Check: Health Monitoring
+          httpGet:
+            path: /api/health
+            port: 5000
+          initialDelaySeconds: 15
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: saaya-backend-service
+spec:
+  selector:
+    app: saaya-backend
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      nodePort: 30005 # We fix this port so Frontend can find it
+  type: NodePort
+
+---
+# ================= FRONTEND =================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: saaya-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: saaya-frontend
+  template:
+    metadata:
+      labels:
+        app: saaya-frontend
+    spec:
+      containers:
+      - name: saaya-frontend
+        image: priyobrotokarmakar/saaya-frontend:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: saaya-frontend-service
+spec:
+  selector:
+    app: saaya-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30007 # This is the port we will open in AWS
+  type: NodePort
