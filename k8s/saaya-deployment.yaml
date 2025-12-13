@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: saaya-backend
-        image: priyobrotokarmakar/saaya-frontend:latest
+        image: priyobrotokarmakar/saaya-backend:latest
         ports:
         - containerPort: 5000
         livenessProbe: # Syllabus Check: Health Monitoring
