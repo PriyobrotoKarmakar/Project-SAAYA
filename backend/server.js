@@ -22,9 +22,9 @@ const app = express();
 // MIDDLEWARE CONFIGURATION
 // ============================================================================
 app.use(cors({
-  origin: config.ALLOWED_ORIGINS,
-  credentials: true
-})); // Enable CORS for frontend communication
+    origin: '*', 
+    methods: ['GET', 'POST']
+}));
 
 app.use(bodyParser.json()); // Parse incoming JSON payloads
 app.use(bodyParser.urlencoded({ extended: true }));
