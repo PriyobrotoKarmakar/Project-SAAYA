@@ -23,7 +23,7 @@ const app = express();
 // ============================================================================
 app.use(cors({
     origin: '*', 
-    methods: ['GET', 'POST']
+    methods: ['GET', 'POST', 'DELETE', 'PUT'] 
 }));
 
 app.use(bodyParser.json()); // Parse incoming JSON payloads
