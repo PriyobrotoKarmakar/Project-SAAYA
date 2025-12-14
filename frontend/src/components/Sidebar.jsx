@@ -1,13 +1,11 @@
 import { Home, Map, Bell, Settings, Shield, Users, TrendingUp, Database } from 'lucide-react';
-import { useState } from 'react';
 
-const Sidebar = () => {
-  const [activeItem, setActiveItem] = useState('home');
+const Sidebar = ({ activeView, onViewChange, alertsBadge }) => {
 
   const menuItems = [
     { id: 'home', icon: Home, label: 'Home', badge: null },
     { id: 'map', icon: Map, label: 'Live Map', badge: null },
-    { id: 'alerts', icon: Bell, label: 'Alerts', badge: 12 },
+    { id: 'alerts', icon: Bell, label: 'Alerts', badge: alertsBadge },
     { id: 'users', icon: Users, label: 'Nodes', badge: null },
     { id: 'analytics', icon: TrendingUp, label: 'Analytics', badge: null },
     { id: 'data', icon: Database, label: 'Data Logs', badge: null },
@@ -16,7 +14,6 @@ const Sidebar = () => {
 
   return (
     <div className="glass-panel h-full p-4 flex flex-col">
-      {/* Logo */}
       <div className="mb-8">
         <div className="flex items-center gap-3 px-2">
           <div className="icon-container-red">
@@ -29,16 +26,15 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 space-y-2">
         {menuItems.map((item) => {
           const Icon = item.icon;
-          const isActive = activeItem === item.id;
+          const isActive = activeView === item.id;
           
           return (
             <button
               key={item.id}
-              onClick={() => setActiveItem(item.id)}
+              onClick={() => onViewChange(item.id)}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 ${
                 isActive
                   ? 'sidebar-item-active'
@@ -59,7 +55,6 @@ const Sidebar = () => {
         })}
       </nav>
 
-      {/* Status */}
       <div className="mt-auto pt-4 border-t border-white/10">
         <div className="flex items-center gap-2 px-4 py-2">
           <div className="status-dot status-dot-green animate-pulse"></div>

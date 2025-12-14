@@ -7,6 +7,12 @@ import StatsGrid from './components/StatsGrid';
 import MapPanel from './components/MapPanel';
 import AlertsHeader from './components/AlertsHeader';
 import AlertsList from './components/AlertsList';
+import AlertsView from './components/AlertsView';
+import NodesView from './components/NodesView';
+import AnalyticsView from './components/AnalyticsView';
+import DataLogsView from './components/DataLogsView';
+import LiveMapView from './components/LiveMapView';
+import SettingsView from './components/SettingsView';
 import EmergencyContact from './components/EmergencyContact';
 import { findNearestPoliceStation } from './data/policeStations';
 import { API_ENDPOINTS, getDeleteAlertUrl } from './config';
@@ -16,6 +22,8 @@ function App() {
   const [alerts, setAlerts] = useState([]);
   const [previousAlertIds, setPreviousAlertIds] = useState(new Set());
   const [verifiedAlerts, setVerifiedAlerts] = useState(new Map());
+  const [currentView, setCurrentView] = useState('home');
+  const [solvedAlerts, setSolvedAlerts] = useState([]);
 
   useEffect(() => {
     const fetchAlerts = async () => {
@@ -189,6 +197,13 @@ function App() {
       console.log('Could not remove from backend:', error);
     }
     
+    const solvedAlert = {
+      ...alert,
+      solvedAt: new Date().toLocaleString(),
+      originalStatus: alert.status
+    };
+    setSolvedAlerts(prev => [solvedAlert, ...prev]);
+    
     setAlerts(prevAlerts => prevAlerts.filter(a => 
       `${a.deviceId}_${a.timestamp}_${a.coordinates.join('_')}` !== uniqueAlertId
     ));
@@ -209,6 +224,49 @@ function App() {
     );
   };
 
+  const handleReactivateAlert = (alert) => {
+    const reactivatedAlert = {
+      deviceId: alert.deviceId,
+      heartRate: alert.heartRate,
+      status: alert.originalStatus || alert.alertStatus,
+      location: alert.location,
+      timestamp: `Reactivated - ${new Date().toLocaleTimeString()}`,
+      coordinates: alert.coordinates
+    };
+    
+    setAlerts(prev => [reactivatedAlert, ...prev]);
+    setSolvedAlerts(prev => prev.filter(a => 
+      a.deviceId !== alert.deviceId || a.timestamp !== alert.timestamp
+    ));
+
+    toast.success(
+      `🔄 Alert Reactivated: ${alert.deviceId}`,
+      {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "dark",
+      }
+    );
+  };
+
+  const handlePermanentDelete = (alert) => {
+    setSolvedAlerts(prev => prev.filter(a => 
+      a.deviceId !== alert.deviceId || a.timestamp !== alert.timestamp
+    ));
+    setAlerts(prev => prev.filter(a => 
+      a.deviceId !== alert.deviceId || a.timestamp !== alert.timestamp
+    ));
+
+    toast.info(
+      `🗑️ Alert Permanently Deleted: ${alert.deviceId}`,
+      {
+        position: "bottom-right",
+        autoClose: 2000,
+        theme: "dark",
+      }
+    );
+  };
+
   const activeAlerts = alerts.filter(a => a.status === 'SOS').length;
   const totalNodes = alerts.length;
 
@@ -217,28 +275,86 @@ function App() {
       <div className="h-full grid grid-cols-12 gap-4">
         
         <div className="col-span-2">
-          <Sidebar />
-        </div>
-
-        <div className="col-span-7 flex flex-col gap-4 min-h-0">
-          <Header currentTime={currentTime} />
-          <StatsGrid totalNodes={totalNodes} activeAlerts={activeAlerts} />
-          
-          <div className="flex-1 min-h-0">
-            <MapPanel alerts={alerts} verifiedRoutes={verifiedAlerts} />
-          </div>
-        </div>
-
-        <div className="col-span-3 flex flex-col gap-4 min-h-0">
-          <AlertsHeader activeAlerts={activeAlerts} totalNodes={totalNodes} />
-          <AlertsList 
-            alerts={alerts} 
-            onVerifyAlert={handleVerifyAlert}
-            onRemoveAlert={handleRemoveAlert}
-            verifiedAlerts={verifiedAlerts}
+          <Sidebar 
+            activeView={currentView} 
+            onViewChange={setCurrentView}
+            alertsBadge={alerts.length + solvedAlerts.length}
           />
-          <EmergencyContact />
         </div>
+
+        {currentView === 'alerts' ? (
+          <div className="col-span-10 flex flex-col gap-4 min-h-0">
+            <Header currentTime={currentTime} />
+            <div className="flex-1 min-h-0">
+              <AlertsView 
+                activeAlerts={alerts}
+                solvedAlerts={solvedAlerts}
+                onReactivate={handleReactivateAlert}
+                onPermanentDelete={handlePermanentDelete}
+              />
+            </div>
+          </div>
+        ) : currentView === 'users' ? (
+          <div className="col-span-10 flex flex-col gap-4 min-h-0">
+            <Header currentTime={currentTime} />
+            <div className="flex-1 min-h-0">
+              <NodesView 
+                alerts={alerts}
+                solvedAlerts={solvedAlerts}
+              />
+            </div>
+          </div>
+        ) : currentView === 'analytics' ? (
+          <div className="col-span-10 flex flex-col gap-4 min-h-0">
+            <Header currentTime={currentTime} />
+            <div className="flex-1 min-h-0">
+              <AnalyticsView 
+                alerts={alerts}
+                solvedAlerts={solvedAlerts}
+              />
+            </div>
+          </div>
+        ) : currentView === 'data' ? (
+          <div className="col-span-10 min-h-0">
+            <DataLogsView 
+              alerts={alerts}
+              solvedAlerts={solvedAlerts}
+            />
+          </div>
+        ) : currentView === 'map' ? (
+          <div className="col-span-10 min-h-0">
+            <LiveMapView 
+              alerts={alerts}
+              verifiedRoutes={verifiedAlerts}
+            />
+          </div>
+        ) : currentView === 'settings' ? (
+          <div className="col-span-10 min-h-0">
+            <SettingsView />
+          </div>
+        ) : (
+          <>
+            <div className="col-span-7 flex flex-col gap-4 min-h-0">
+              <Header currentTime={currentTime} />
+              <StatsGrid totalNodes={totalNodes} activeAlerts={activeAlerts} />
+              
+              <div className="flex-1 min-h-0">
+                <MapPanel alerts={alerts} verifiedRoutes={verifiedAlerts} />
+              </div>
+            </div>
+
+            <div className="col-span-3 flex flex-col gap-4 min-h-0">
+              <AlertsHeader activeAlerts={activeAlerts} totalNodes={totalNodes} />
+              <AlertsList 
+                alerts={alerts} 
+                onVerifyAlert={handleVerifyAlert}
+                onRemoveAlert={handleRemoveAlert}
+                verifiedAlerts={verifiedAlerts}
+              />
+              <EmergencyContact />
+            </div>
+          </>
+        )}
       </div>
       
       {/* Toast Notification Container */}

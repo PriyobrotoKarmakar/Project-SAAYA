@@ -2,7 +2,6 @@ import React from 'react';
 import AlertCard from './AlertCard';
 
 const AlertsList = ({ alerts, onVerifyAlert, onRemoveAlert, verifiedAlerts }) => {
-  // Helper function to create unique alert ID
   const getAlertId = (alert) => {
     return `${alert.deviceId}_${alert.timestamp}_${alert.coordinates?.join('_') || ''}`;
   };
