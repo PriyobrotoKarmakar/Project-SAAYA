@@ -1,5 +1,6 @@
 module.exports = {
   PORT: process.env.PORT || 5000,
+  HOST: process.env.HOST || '0.0.0.0',
   API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:5000',
   SOS_HEART_RATE_THRESHOLD: 150,
   MAX_ALERTS_IN_MEMORY: 50,

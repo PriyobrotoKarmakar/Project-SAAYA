@@ -31,14 +31,16 @@ app.get('/', (req, res) => {
   });
 });
 
-app.listen(config.PORT, () => {
+app.listen(config.PORT, config.HOST, () => {
+  const displayHost = config.HOST === '0.0.0.0' ? 'localhost' : config.HOST;
   console.log('\n' + '='.repeat(70));
   console.log('\x1b[36m%s\x1b[0m', '🛡️  PROJECT SAAYA - CENTRAL COMMAND ONLINE (MVC Architecture)');
   console.log('='.repeat(70));
-  console.log(`📡 Server running on: http://localhost:${config.PORT}`);
-  console.log(`🏥 Health Check: http://localhost:${config.PORT}/api/health`);
-  console.log(`📊 Active Alerts: http://localhost:${config.PORT}/api/alerts`);
-  console.log(`📈 System Stats: http://localhost:${config.PORT}/api/stats`);
+  console.log(`📡 Server running on: http://${displayHost}:${config.PORT}`);
+  console.log(`🏥 Health Check: http://${displayHost}:${config.PORT}/api/health`);
+  console.log(`📊 Active Alerts: http://${displayHost}:${config.PORT}/api/alerts`);
+  console.log(`📈 System Stats: http://${displayHost}:${config.PORT}/api/stats`);
+  console.log(`🌐 Listening on: ${config.HOST}:${config.PORT}`);
   console.log(`🏗️  Architecture: MVC (Model-View-Controller)`);
   console.log(`🐳 Deployment: Docker + Kubernetes Ready`);
   console.log('='.repeat(70));
