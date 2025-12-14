@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: saaya-config
+  namespace: default
+data:
+  # Change this IP when you get new EC2 instance
+  BACKEND_IP: "3.238.251.104"
+  VITE_BACKEND_IP: "3.238.251.104"
+  VITE_BACKEND_PORT: "5000"
+  PORT: "5000"
+  HOST: "0.0.0.0"
+  NODE_ENV: "production"
