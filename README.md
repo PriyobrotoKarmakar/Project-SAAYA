@@ -12,7 +12,7 @@
 
 **A Digital Twin IoT system that receives real-time signals from smartwatch simulators and alerts a React Dashboard with automatic police station dispatch.**
 
-[Features](#features) • [Architecture](#architecture) • [Getting Started](#getting-started) • [API Reference](#api-reference) • [Deployment](#deployment)
+[Features](#features) • [Architecture](#architecture) • [Getting Started](#getting-started) • [API Reference](#api-reference) • [Docker & Deployment](#docker--deployment)
 
 </div>
 
@@ -57,31 +57,91 @@
 
 ### Frontend (React Dashboard)
 
+#### �️ Multi-View Dashboard
+
+- **Home View** - Default dashboard with map panel, stats grid, and alert feed
+- **Alerts View** - Comprehensive alerts management (active + solved alerts)
+- **Nodes/Users View** - IoT device monitoring with battery, signal, heart rate metrics
+- **Analytics View** - System analytics with KPIs, charts, and insights
+- **Data Logs View** - Real-time log monitoring with search and filters
+- **Live Map View** - Full-screen interactive map with layer controls
+- **Settings View** - Comprehensive system configuration panel
+
 #### 🗺️ Interactive Map System
 
-- **Satellite Imagery** - Esri World Imagery with place names overlay
-- **Dynamic Markers** - Red emergency markers, blue police station markers
+- **Satellite Imagery** - Esri World Imagery with place names overlay (loaded locally, no CDN)
+- **Dynamic Markers** - Custom circular markers (red SOS, blue normal, green police)
 - **Smart Auto-Zoom** - Automatic bounds fitting on new alerts only
 - **Multi-Route Display** - 8 distinct colors for simultaneous emergency routes
-- **Police Station Dispatch** - Stations appear only when emergency is verified
+- **Layer Controls** - Toggle alerts, police stations, routes, heatmap, clusters
+- **Search Functionality** - Search by device ID, location, or police station
+- **Map Legend** - Color-coded legend for all marker types
+- **Statistics Overlay** - Real-time stats displayed on map
 - **Distance Calculation** - Real-time distance display in kilometers
 
-#### 🚨 Emergency Response
+#### 🚨 Alert Management
 
+- **Active Alerts** - Live emergency alerts with verification options
+- **Solved Alerts** - Historical archive of resolved emergencies
+- **Reactivate Alerts** - Move solved alerts back to active status
+- **Permanent Delete** - Remove alerts completely from system
+- **Search & Filter** - Find alerts by device ID, location, or emergency status
+- **Statistics Grid** - Total, active, solved, and emergency alert counts
 - **"Verify Rape Attempt" Button** - One-click emergency verification
 - **Automatic Police Dispatch** - Finds and visualizes nearest police station route
 - **Real-Time Notifications** - Toast alerts for new emergencies and verifications
-- **Alert Management** - Remove/close alerts with backend synchronization
-- **Color-Coded Routes** - Unique colors prevent route confusion
 
-#### 📊 Dashboard Features
+#### 📊 Analytics Dashboard
 
-- **Live Statistics** - Active alerts, total nodes, system health
-- **Scrollable Alert Feed** - Custom-styled scrollbar, fixed height container
-- **Real-Time Clock** - Updates every second
+- **KPI Cards** - Total alerts, emergency events, resolved alerts, active nodes with trend indicators
+- **Weekly Trends Chart** - Bar chart showing alert patterns over 7 days
+- **Status Distribution** - Pie chart for active/solved/emergency breakdown
+- **Performance Metrics** - Response time, resolution rate, uptime, connectivity
+- **Geographic Distribution** - Top 5 locations with alert counts
+- **Hourly Activity** - 24-hour activity heatmap
+- **Health Metrics** - Average heart rate, battery level, connectivity status
+- **AI Insights** - Automated recommendations and pattern detection
+
+#### 🔍 Data Logs Monitoring
+
+- **Real-time Logs** - Auto-refresh every 5 seconds (toggleable)
+- **Log Types** - Telemetry, Alert, API, System, Database
+- **Log Levels** - Error, Warning, Info, Success
+- **Search & Filter** - Find logs by message, device ID, or source
+- **Detail Inspector** - Split-panel view for log details
+- **Export Logs** - Download logs as JSON
+- **Statistics Badges** - Total, errors, warnings, info, success counts
+
+#### 🖧 IoT Device Monitoring
+
+- **Device Cards** - 3-column grid showing all IoT nodes
+- **Real-time Metrics** - Heart rate, battery %, signal strength
+- **Device Status** - Online/offline/emergency/low battery indicators
+- **Search & Sort** - By device ID, heart rate, battery, or alerts
+- **Filter Options** - All, online, offline, emergency, low battery
+- **Alert History** - Total alerts generated per device
+- **Location Display** - GPS coordinates for each device
+- **Last Seen** - Timestamp of last communication
+
+#### ⚙️ Settings Panel
+
+- **General Settings** - Theme (dark/light/auto), language, timezone, notifications
+- **Alert Settings** - Auto-verify threshold, priority levels, email/SMS alerts
+- **Map Settings** - Default zoom, map style, layer preferences, auto-centering
+- **System Settings** - Refresh interval, max alerts, log levels, API timeout
+- **Privacy Settings** - Show device IDs, coordinates, data anonymization
+- **Contact Settings** - Emergency contacts, admin email, support phone
+- **Quick Access Hotlines** - 1091 Women Helpline, 112 Emergency, 100 Police, 102 Ambulance
+
+#### 🎨 UI/UX Features
+
 - **Glass Morphism UI** - Modern dark cyberpunk theme
 - **Responsive Grid** - 100vh fixed height, no page overflow
-- **Emergency Contact Card** - Quick access to hotlines
+- **Custom Scrollbars** - Styled scrollbars matching theme
+- **Neon Accents** - Glowing blue accents for emergency elements
+- **Sidebar Navigation** - Dynamic view switching with badge notifications
+- **Toast Notifications** - Non-intrusive alerts for system events
+- **Loading States** - Smooth transitions and loading indicators
 
 ### Backend (Node.js + Express)
 
@@ -109,6 +169,19 @@
 - **Input Validation** - Comprehensive payload validation
 - **CORS Enabled** - Cross-origin resource sharing configured
 - **Silent Polling** - Reduced console spam for health checks
+- **Environment Configuration** - `.env` support for API base URL and port
+
+### Demo & Testing
+
+#### 🎭 Demo Alert Simulator
+
+- **Automated Demo Script** - `demo-alerts.js` for realistic simulations
+- **10 Cities Coverage** - Kolkata, Mumbai, Delhi, Bangalore, Pune, Chennai, Hyderabad, Ahmedabad, Jaipur, Lucknow
+- **5-Second Intervals** - New alert every 5 seconds
+- **Random Heart Rates** - 30% normal (60-140), 40% emergency (150-160), 30% critical (160-190)
+- **GPS Variance** - Realistic location offsets for accurate simulation
+- **Beautiful Console Output** - Progress tracking with emojis and status indicators
+- **Environment-Based** - Reads API URL from config/constants.js
 
 ### Quality Assurance
 
@@ -127,11 +200,12 @@
 
 - **React** 18.3.1 - Component-based UI framework
 - **Vite** 7.2.7 - Fast build tool and dev server
-- **React Leaflet** 5.0.0 - Interactive maps
-- **Leaflet** 1.9.4 - Mapping library
+- **React Leaflet** 5.0.0 - Interactive maps (locally bundled)
+- **Leaflet** 1.9.4 - Mapping library (locally bundled, no CDN)
 - **React Toastify** 10.0.0 - Toast notifications
 - **Lucide React** 0.561.0 - Icon library
 - **Tailwind CSS** 4.x - Utility-first CSS framework
+- **Axios** - HTTP client for API requests
 
 ### Backend
 
@@ -243,7 +317,7 @@ project-saaya/
 │
 ├── backend/                      # Node.js + Express Backend
 │   ├── config/
-│   │   └── constants.js          # Centralized configuration
+│   │   └── constants.js          # Centralized configuration (with API_BASE_URL)
 │   ├── controllers/
 │   │   └── telemetryController.js # Business logic layer
 │   ├── models/
@@ -252,7 +326,10 @@ project-saaya/
 │   ├── routes/
 │   │   └── apiRoutes.js          # API endpoint definitions
 │   ├── server.js                 # Express server entry point
+│   ├── demo-alerts.js            # Demo alert simulator script
+│   ├── DEMO_README.md            # Demo simulator documentation
 │   ├── package.json              # Backend dependencies
+│   ├── .env.example              # Environment variables template
 │   ├── Dockerfile                # Backend container config
 │   └── .dockerignore             # Docker exclusions
 │
@@ -262,6 +339,12 @@ project-saaya/
 │   │   │   ├── AlertCard.jsx     # Alert display with Verify/Close
 │   │   │   ├── AlertsList.jsx    # Scrollable alert container
 │   │   │   ├── AlertsHeader.jsx  # Alerts panel header
+│   │   │   ├── AlertsView.jsx    # Full alerts management view
+│   │   │   ├── NodesView.jsx     # IoT device monitoring dashboard
+│   │   │   ├── AnalyticsView.jsx # System analytics with charts
+│   │   │   ├── DataLogsView.jsx  # Real-time log monitoring
+│   │   │   ├── LiveMapView.jsx   # Full-screen interactive map
+│   │   │   ├── SettingsView.jsx  # Comprehensive settings panel
 │   │   │   ├── EmergencyContact.jsx # Hotline contact card
 │   │   │   ├── Header.jsx        # Dashboard header + clock
 │   │   │   ├── MapPanel.jsx      # Interactive map + routes
@@ -334,16 +417,37 @@ cd ../frontend
 npm install
 ```
 
-#### 4. Configure Environment Variables
+#### 2. Configure Environment Variables
 
-Create a `.env` file in the **root directory**:
+Create a `.env` file in the **backend directory**:
+
+```bash
+cd backend
+cp .env.example .env
+```
+
+Edit `backend/.env`:
+
+```bash
+# Server Configuration
+PORT=5000
+NODE_ENV=development
+
+# API Configuration
+API_BASE_URL=http://localhost:5000
+
+# CORS Allowed Origins (comma-separated)
+ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173
+```
+
+Also create a `.env` file in the **root directory** for frontend and QA tests:
 
 ```bash
 # Copy the template
 cp .env.example .env
 ```
 
-Edit `.env`:
+Edit root `.env`:
 
 ```bash
 # For localhost development
@@ -355,7 +459,7 @@ VITE_BACKEND_PORT=5000
 # VITE_BACKEND_PORT=5000
 ```
 
-> **Note:** This single `.env` file controls both frontend and QA test configurations!
+> **Note:** The root `.env` file controls frontend and QA test configurations, while `backend/.env` controls backend server settings!
 
 ### Running the Application
 
@@ -376,6 +480,25 @@ npm run dev
 ```
 
 Dashboard runs on: `http://localhost:5173`
+
+#### Run Demo Alert Simulator
+
+To simulate realistic emergency scenarios:
+
+```bash
+cd backend
+node demo-alerts.js
+```
+
+This will:
+
+- Send 10 alerts from different cities
+- New alert every 5 seconds
+- Random heart rates (60-190 BPM)
+- Display progress in console
+- Populate your dashboard with realistic data
+
+**Make sure the backend is running before starting the demo!**
 
 ### Testing the System
 
@@ -685,7 +808,154 @@ Output:
 
 ---
 
-## 🐳 Docker & Deployment
+## � Usage Guide
+
+### Dashboard Navigation
+
+The Project Saaya dashboard features a sidebar navigation system with multiple views:
+
+#### 🏠 Home View (Default)
+
+- **Stats Grid** - Total nodes, active alerts, system health
+- **Interactive Map** - Real-time alert visualization with police station routing
+- **Alert Feed** - Scrollable list of active alerts
+- **Emergency Actions** - Verify alerts and trigger police dispatch
+
+#### 🚨 Alerts View
+
+- **Active Alerts Tab** - Current emergency situations requiring attention
+- **Solved Alerts Tab** - Historical archive of resolved emergencies
+- **Search Bar** - Find alerts by device ID, location, or coordinates
+- **Filter Options** - All, Active, Solved, Emergency
+- **Statistics Cards** - Total, Active, Solved, Emergency counts
+- **Actions**:
+  - Click "Verify" to confirm and dispatch police
+  - Click "Remove" to move to solved alerts
+  - Click "Reactivate" (in solved tab) to restore alert
+  - Click "Delete" (in solved tab) to permanently remove
+
+#### 🖧 Nodes/Users View
+
+- **Device Cards** - 3-column grid showing all IoT devices
+- **Real-time Metrics** - Heart rate (BPM), battery (%), signal strength
+- **Status Indicators** - Online (green), Offline (gray), Emergency (red), Low Battery (amber)
+- **Search & Sort** - By device ID, heart rate, battery level, or alert count
+- **Filter Buttons** - All, Online, Offline, Emergency, Low Battery
+- **Device Details** - Location, last seen, total alerts history
+
+#### 📊 Analytics View
+
+- **KPI Cards** - Total alerts, emergency events, resolved alerts, active nodes
+- **Weekly Trends** - Bar chart showing alert patterns over 7 days
+- **Status Distribution** - Pie chart for active/solved/emergency breakdown
+- **Performance Metrics** - Response time, resolution rate, uptime, connectivity
+- **Geographic Distribution** - Top 5 locations with alert counts
+- **Hourly Activity** - 24-hour activity heatmap
+- **Health Metrics** - Average heart rate, battery, connectivity
+- **AI Insights** - Automated recommendations and pattern detection
+
+#### 📋 Data Logs View
+
+- **Real-time Streaming** - Auto-refresh every 5 seconds (toggle on/off)
+- **Log Types** - Telemetry, Alert, API, System, Database
+- **Log Levels** - Error (red), Warning (amber), Info (blue), Success (green)
+- **Search** - Find logs by message content, device ID, or source
+- **Filters** - Combine log level and type filters
+- **Detail Inspector** - Click any log to see full details in split panel
+- **Export** - Download all logs as JSON file
+- **Statistics** - Total logs, errors, warnings, info, success counts
+
+#### 🗺️ Live Map View
+
+- **Full-Screen Map** - Maximized interactive map with all controls
+- **Layer Toggle**:
+  - Alerts - Show/hide emergency markers
+  - Police Stations - Show/hide police station markers
+  - Routes - Show/hide verified emergency routes
+  - Heatmap - Density visualization (coming soon)
+  - Clusters - Group nearby markers (coming soon)
+- **Map Controls**:
+  - Zoom In/Out - Manual zoom control
+  - Reset View - Return to default zoom and center
+- **Search** - Find alerts by device ID, location, or police station name
+- **Statistics Overlay** - Real-time counts of active alerts, total alerts, police stations, routes
+- **Legend** - Color-coded guide for all marker types
+- **Interactive Markers** - Click markers for detailed popups
+
+#### ⚙️ Settings View
+
+- **General Tab**:
+  - Theme: Dark, Light, Auto (system)
+  - Language: English, Hindi, Marathi, Bengali
+  - Timezone: IST, GST, UTC
+  - Notifications: Enable/disable
+  - Sound Effects: Enable/disable
+  
+- **Alerts Tab**:
+  - Auto-Verify Threshold: Heart rate BPM (100-200)
+  - Alert Priority: Low, Medium, High, Critical
+  - SOS Notifications: Enable/disable
+  - Email Alerts: Enable/disable
+  - SMS Alerts: Enable/disable (requires integration)
+  - Alert Retention: Days to keep history (7-365)
+  
+- **Map Tab**:
+  - Default Zoom: 1-18
+  - Map Style: Satellite, Streets, Hybrid, Terrain
+  - Show Police Stations: Default visibility
+  - Show Routes: Default visibility
+  - Auto Center Map: On new alerts
+  - Cluster Markers: Group nearby markers
+  
+- **System Tab**:
+  - Refresh Interval: Seconds between updates (1-60)
+  - Max Alerts Displayed: Limit (10-500)
+  - Log Level: Error, Warning, Info, Debug
+  - API Timeout: Request timeout in seconds (5-120)
+  - Data Retention: Days to keep logs (7-365)
+  - Auto Backup: Enable/disable daily backups
+  
+- **Privacy Tab**:
+  - Show Device IDs: Display full identifiers
+  - Show Coordinates: Display GPS coordinates
+  - Anonymize Data: Remove PII
+  - Share Analytics: Help improve system
+  
+- **Contacts Tab**:
+  - Women Helpline: 1091
+  - Admin Email: System administrator
+  - Support Phone: Technical support
+  - Quick Access Cards: Emergency hotlines
+
+**Actions**:
+
+- Click "Save Changes" to persist settings (stored in localStorage)
+- Click "Reset" to restore default settings
+
+### Demo Alert Simulator
+
+For demonstration purposes, use the included demo script:
+
+```bash
+cd backend
+node demo-alerts.js
+```
+
+**What happens:**
+
+1. Script sends 10 alerts over 50 seconds (one every 5 seconds)
+2. Each alert comes from a different Indian city
+3. Random heart rates simulate emergency (150+ BPM) and normal scenarios
+4. Dashboard updates in real-time
+5. Toast notifications appear for new emergencies
+6. Map auto-zooms to new alert locations
+
+**Cities included:**
+Kolkata, Mumbai, Delhi, Bangalore, Pune, Chennai, Hyderabad, Ahmedabad, Jaipur, Lucknow
+
+---
+
+## �🐳 Docker & Deployment
 
 ### Docker Images
 
@@ -897,10 +1167,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-<div align="center">
+<p align="center">
+<strong>⭐ If you find this project useful, please consider giving it a star!</strong>
+</p>
 
-**⭐ If you find this project useful, please consider giving it a star!**
-
+<p align="center">
 Made with ❤️ for Women's Safety
-
-</div>
+</p>
