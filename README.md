@@ -314,9 +314,9 @@ project-saaya/
 #### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/PriyobrotoKarmakar/project-saaya.git
+git clone https://github.com/PriyobrotoKarmakar/Project-SAAYA.git
 ```bash
-git clone https://github.com/PriyobrotoKarmakar/project-saaya.git
+git clone https://github.com/PriyobrotoKarmakar/Project-SAAYA.git
 cd project-saaya
 ```
 
@@ -887,7 +887,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Contact & Support
 
 **Author:** Priyobroto Karmakar  
-**Repository:** [github.com/PriyobrotoKarmakar/project-saaya](https://github.com/PriyobrotoKarmakar/project-saaya)
+**Repository:** [github.com/PriyobrotoKarmakar/Project-SAAYA](https://github.com/PriyobrotoKarmakar/Project-SAAYA)
 
 **Emergency Hotlines (India):**
 
