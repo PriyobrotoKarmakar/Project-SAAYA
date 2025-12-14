@@ -1,3 +1,4 @@
+require('dotenv').config({ path: '../.env' });
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -32,14 +33,16 @@ app.get('/', (req, res) => {
 });
 
 app.listen(config.PORT, config.HOST, () => {
-  const displayHost = config.HOST === '0.0.0.0' ? 'localhost' : config.HOST;
+  const apiUrl = config.API_BASE_URL || `http://${config.HOST}:${config.PORT}`;
+  const displayHost = apiUrl.replace('http://', '').replace(`http://`, '').split(':')[0];
+  
   console.log('\n' + '='.repeat(70));
   console.log('\x1b[36m%s\x1b[0m', '🛡️  PROJECT SAAYA - CENTRAL COMMAND ONLINE (MVC Architecture)');
   console.log('='.repeat(70));
-  console.log(`📡 Server running on: http://${displayHost}:${config.PORT}`);
-  console.log(`🏥 Health Check: http://${displayHost}:${config.PORT}/api/health`);
-  console.log(`📊 Active Alerts: http://${displayHost}:${config.PORT}/api/alerts`);
-  console.log(`📈 System Stats: http://${displayHost}:${config.PORT}/api/stats`);
+  console.log(`📡 Server running on: ${apiUrl}`);
+  console.log(`🏥 Health Check: ${apiUrl}/api/health`);
+  console.log(`📊 Active Alerts: ${apiUrl}/api/alerts`);
+  console.log(`📈 System Stats: ${apiUrl}/api/stats`);
   console.log(`🌐 Listening on: ${config.HOST}:${config.PORT}`);
   console.log(`🏗️  Architecture: MVC (Model-View-Controller)`);
   console.log(`🐳 Deployment: Docker + Kubernetes Ready`);
