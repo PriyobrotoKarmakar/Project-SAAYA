@@ -6,7 +6,7 @@ const Header = ({ currentTime }) => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold mb-1 font-rajdhani">
-            Safety Command Center
+            Saaya Command Center
           </h1>
           <p className="text-sm text-gray-400">
             Real-time monitoring and emergency response system

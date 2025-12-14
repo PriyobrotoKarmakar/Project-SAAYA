@@ -5,7 +5,6 @@ const AlertCard = ({ deviceId, heartRate, status, location, timestamp, onVerify,
   
   return (
     <div className={`glass-panel-hover p-4 relative ${isEmergency ? 'alert-card-emergency' : ''}`}>
-      {/* Close Button */}
       <button
         onClick={onRemove}
         className="absolute top-2 right-2 p-1 rounded-full hover:bg-red-500/20 transition-colors group"
@@ -59,7 +58,6 @@ const AlertCard = ({ deviceId, heartRate, status, location, timestamp, onVerify,
           </div>
         </div>
 
-        {/* Verify Button - Only show for emergency alerts */}
         {isEmergency && (
           <button
             onClick={onVerify}

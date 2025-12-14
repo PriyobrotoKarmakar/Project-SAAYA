@@ -8,49 +8,28 @@ import java.net.URL;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-/**
- * ============================================================================
- * PROJECT SAAYA - QUALITY GATE AUTOMATION
- * ============================================================================
- * Automated Testing Suite for Women's Safety Platform
- * This test acts as a "Digital Guardian" that ensures the backend is healthy
- * before deployment to production (Kubernetes/Cloud).
- * ============================================================================
- */
 public class SaayaTest {
 
-    // Backend API Configuration
-    private final String BACKEND_URL = "http://13.220.122.72:5000/api/health";
-    private final String ALERTS_URL = "http://13.220.122.72:5000/api/alerts";
-    private final String STATS_URL = "http://13.220.122.72:5000/api/stats";
-
-    /**
-     * Test 1: Backend Health Check (CRITICAL)
-     * This test MUST pass or deployment is aborted
-     */
+   
     @Test
     public void testBackendIsRunning() {
-        System.out.println("🛡️  [Maven QA] Starting Project Saaya Health Check...");
-        System.out.println("   Target: " + BACKEND_URL);
+        System.out.println("  [Maven QA] Starting Project Saaya Health Check...");
+        System.out.println("   Target: " + TestConfig.HEALTH_URL);
         
-        boolean isUp = checkUrl(BACKEND_URL);
+        boolean isUp = checkUrl(TestConfig.HEALTH_URL);
+ 
+        assertTrue(" CRITICAL: Backend is Down! Deployment Aborted.", isUp);
         
-        // If isUp is false, the build FAILS here
-        assertTrue("🚨 CRITICAL: Backend is Down! Deployment Aborted.", isUp);
-        
-        System.out.println("✅ [Success] Backend is Healthy. Ready for Cloud Deployment.");
+        System.out.println(" [Success] Backend is Healthy. Ready for Cloud Deployment.");
     }
 
-    /**
-     * Test 2: Alerts Endpoint Validation
-     * Ensures the core API endpoint is responding correctly
-     */
+   
     @Test
     public void testAlertsEndpoint() {
         System.out.println("\n🔍 [Maven QA] Testing Alerts API Endpoint...");
-        System.out.println("   Target: " + ALERTS_URL);
+        System.out.println("   Target: " + TestConfig.ALERTS_URL);
         
-        boolean isResponding = checkUrl(ALERTS_URL);
+        boolean isResponding = checkUrl(TestConfig.ALERTS_URL);
         
         assertTrue("❌ FAIL: Alerts endpoint not responding!", isResponding);
         
@@ -64,9 +43,9 @@ public class SaayaTest {
     @Test
     public void testStatsEndpoint() {
         System.out.println("\n📊 [Maven QA] Testing Stats API Endpoint...");
-        System.out.println("   Target: " + STATS_URL);
+        System.out.println("   Target: " + TestConfig.STATS_URL);
         
-        boolean isResponding = checkUrl(STATS_URL);
+        boolean isResponding = checkUrl(TestConfig.STATS_URL);
         
         assertTrue("❌ FAIL: Stats endpoint not responding!", isResponding);
         
@@ -82,7 +61,7 @@ public class SaayaTest {
         System.out.println("\n🔬 [Maven QA] Validating Health Response Structure...");
         
         try {
-            URL url = new URL(BACKEND_URL);
+            URL url = new URL(TestConfig.HEALTH_URL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.connect();

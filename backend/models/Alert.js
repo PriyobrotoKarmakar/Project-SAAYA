@@ -1,14 +1,3 @@
-// ============================================================================
-// PROJECT SAAYA - ALERT MODEL
-// ============================================================================
-// This represents the data structure for SOS alerts
-// In production, this would be a MongoDB Schema using Mongoose
-// ============================================================================
-
-/**
- * Alert Model Class
- * Represents an emergency alert from a smart watch device
- */
 class Alert {
   constructor(deviceId, heartRate, lat, lng, status = 'SOS') {
     this.deviceId = deviceId;
@@ -20,16 +9,10 @@ class Alert {
     this.createdAt = Date.now();
   }
 
-  /**
-   * Get relative time string for display
-   */
   getRelativeTime() {
     return "Just now";
   }
 
-  /**
-   * Convert alert to JSON format matching frontend requirements
-   */
   toJSON() {
     return {
       deviceId: this.deviceId,

@@ -1,13 +1,3 @@
-// ============================================================================
-// PROJECT SAAYA - TELEMETRY MODEL
-// ============================================================================
-// This represents the data structure for incoming sensor data
-// ============================================================================
-
-/**
- * Telemetry Model Class
- * Represents sensor data from smart watch devices
- */
 class Telemetry {
   constructor(deviceId, heartRate, lat, lng) {
     this.deviceId = deviceId;
@@ -17,16 +7,10 @@ class Telemetry {
     this.receivedAt = Date.now();
   }
 
-  /**
-   * Check if telemetry indicates an emergency
-   */
   isEmergency() {
     return this.heartRate > 150;
   }
 
-  /**
-   * Convert to JSON format
-   */
   toJSON() {
     return {
       deviceId: this.deviceId,

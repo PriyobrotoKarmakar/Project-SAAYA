@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: saaya-backend
 spec:
-  replicas: 2 # Self-Healing: If 1 dies, K8s starts another
+  replicas: 2 
   selector:
     matchLabels:
       app: saaya-backend
@@ -18,7 +18,7 @@ spec:
         image: priyobrotokarmakar/saaya-backend:latest
         ports:
         - containerPort: 5000
-        livenessProbe: # Syllabus Check: Health Monitoring
+        livenessProbe: 
           httpGet:
             path: /api/health
             port: 5000
@@ -36,7 +36,7 @@ spec:
     - protocol: TCP
       port: 5000
       targetPort: 5000
-      nodePort: 30005 # We fix this port so Frontend can find it
+      nodePort: 30005 
   type: NodePort
 
 ---
@@ -72,5 +72,5 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
-      nodePort: 30007 # This is the port we will open in AWS
+      nodePort: 30007 
   type: NodePort

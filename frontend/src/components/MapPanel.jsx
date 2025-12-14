@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-// Fix for default marker icon in React-Leaflet
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import iconRetina from 'leaflet/dist/images/marker-icon-2x.png';
@@ -21,11 +20,10 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 const MapPanel = ({ alerts = [], verifiedRoutes = new Map() }) => {
-  const defaultCenter = [28.6139, 77.2090]; // New Delhi
+  const defaultCenter = [28.6139, 77.2090];
   const [map, setMap] = useState(null);
   const [previousAlertCount, setPreviousAlertCount] = useState(0);
 
-  // Custom icon for emergency markers - using simple red marker
   const emergencyIcon = L.icon({
     iconUrl: 'data:image/svg+xml;base64,' + btoa(`
       <svg xmlns="http://www.w3.org/2000/svg" width="25" height="41" viewBox="0 0 25 41">
@@ -38,7 +36,6 @@ const MapPanel = ({ alerts = [], verifiedRoutes = new Map() }) => {
     popupAnchor: [1, -34],
   });
 
-  // Custom icon for police stations - blue with shield
   const policeIcon = L.icon({
     iconUrl: 'data:image/svg+xml;base64,' + btoa(`
       <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
@@ -52,10 +49,8 @@ const MapPanel = ({ alerts = [], verifiedRoutes = new Map() }) => {
     popupAnchor: [0, -15],
   });
 
-  // Only auto-fit bounds when NEW alerts are added
   useEffect(() => {
     if (map && alerts.length > 0) {
-      // Check if alert count has changed (new alert arrived)
       if (alerts.length !== previousAlertCount) {
         const bounds = alerts.map(alert => alert.coordinates);
         if (bounds.length > 0) {
@@ -83,7 +78,6 @@ const MapPanel = ({ alerts = [], verifiedRoutes = new Map() }) => {
           attribution='&copy; Esri'
         />
 
-        {/* Police Station Markers - ONLY show for verified routes */}
         {Array.from(verifiedRoutes.values()).map((route, index) => (
           <Marker
             key={`station-${index}`}
@@ -103,7 +97,6 @@ const MapPanel = ({ alerts = [], verifiedRoutes = new Map() }) => {
           </Marker>
         ))}
 
-        {/* Alert Markers */}
         {alerts.map((alert, index) => (
           <div key={index}>
             <Marker 
@@ -133,7 +126,6 @@ const MapPanel = ({ alerts = [], verifiedRoutes = new Map() }) => {
           </div>
         ))}
 
-        {/* Verified Routes - Draw lines from police station to alert location */}
         {Array.from(verifiedRoutes.values()).map((route, index) => (
           <Polyline
             key={`route-${index}`}
@@ -159,8 +151,7 @@ const MapPanel = ({ alerts = [], verifiedRoutes = new Map() }) => {
         ))}
       </MapContainer>
       
-      {/* Map Overlay */}
-      <div className="absolute top-4 left-4 glass-panel px-4 py-2 pointer-events-none z-1000">
+      <div className="absolute top-4 right-4 glass-panel px-4 py-2 pointer-events-none z-1000">
         <p className="text-sm font-semibold font-rajdhani">Live Tracking Active</p>
         <p className="text-xs text-gray-400">{alerts.length} Active Signals</p>
         {verifiedRoutes.size > 0 && (

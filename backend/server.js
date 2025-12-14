@@ -1,15 +1,3 @@
-// ============================================================================
-// PROJECT SAAYA - CENTRAL COMMAND BACKEND API (MVC ARCHITECTURE)
-// ============================================================================
-// Digital Twin IoT Platform for Women's Safety
-// This is the "Brain" that receives signals from smart watches and alerts
-// the React Dashboard in real-time.
-//
-// ARCHITECTURE:
-// - MVC (Model-View-Controller) for clean code organization
-// - Microservices deployment (Docker/Kubernetes)
-// ============================================================================
-
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -18,24 +6,16 @@ const config = require('./config/constants');
 
 const app = express();
 
-// ============================================================================
-// MIDDLEWARE CONFIGURATION
-// ============================================================================
 app.use(cors({
     origin: '*', 
     methods: ['GET', 'POST', 'DELETE', 'PUT'] 
 }));
 
-app.use(bodyParser.json()); // Parse incoming JSON payloads
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// ============================================================================
-// API ROUTES (Delegated to Router)
-// ============================================================================
-// All /api/* endpoints are handled by apiRoutes
 app.use('/api', apiRoutes);
 
-// Root endpoint for service identification
 app.get('/', (req, res) => {
   res.json({
     service: 'Project Saaya - Women\'s Safety IoT Platform',
@@ -51,9 +31,6 @@ app.get('/', (req, res) => {
   });
 });
 
-// ============================================================================
-// SERVER STARTUP
-// ============================================================================
 app.listen(config.PORT, () => {
   console.log('\n' + '='.repeat(70));
   console.log('\x1b[36m%s\x1b[0m', '🛡️  PROJECT SAAYA - CENTRAL COMMAND ONLINE (MVC Architecture)');
@@ -69,9 +46,6 @@ app.listen(config.PORT, () => {
   console.log('='.repeat(70) + '\n');
 });
 
-// ============================================================================
-// ERROR HANDLING MIDDLEWARE
-// ============================================================================
 app.use((err, req, res, next) => {
   console.error('\x1b[31m%s\x1b[0m', '❌ Error:', err.message);
   res.status(500).json({
@@ -80,9 +54,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// ============================================================================
-// GRACEFUL SHUTDOWN
-// ============================================================================
+
 process.on('SIGTERM', () => {
   console.log('\x1b[33m%s\x1b[0m', '🛑 SIGTERM received, shutting down gracefully...');
   process.exit(0);

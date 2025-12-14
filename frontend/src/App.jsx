@@ -9,28 +9,24 @@ import AlertsHeader from './components/AlertsHeader';
 import AlertsList from './components/AlertsList';
 import EmergencyContact from './components/EmergencyContact';
 import { findNearestPoliceStation } from './data/policeStations';
+import { API_ENDPOINTS, getDeleteAlertUrl } from './config';
 
 function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [alerts, setAlerts] = useState([]);
   const [previousAlertIds, setPreviousAlertIds] = useState(new Set());
-  const [verifiedAlerts, setVerifiedAlerts] = useState(new Map()); // deviceId -> route info
-  
-  // Backend API URL (change this to your backend URL)
-  const API_URL = 'http://13.220.122.72:5000/api/alerts';
+  const [verifiedAlerts, setVerifiedAlerts] = useState(new Map());
 
-  // Fetch alerts from backend
   useEffect(() => {
     const fetchAlerts = async () => {
       try {
-        const response = await fetch(API_URL);
+        const response = await fetch(API_ENDPOINTS.ALERTS);
         if (response.ok) {
           const data = await response.json();
           setAlerts(data);
         }
       } catch (error) {
         console.log('Backend not connected, using demo data');
-        // Fallback to demo data if backend is not available
         setAlerts([
           {
             deviceId: 'Saaya_001',
@@ -76,16 +72,13 @@ function App() {
       }
     };
 
-    // Initial fetch
     fetchAlerts();
 
-    // Poll every 2 seconds for new alerts
     const pollInterval = setInterval(fetchAlerts, 2000);
 
     return () => clearInterval(pollInterval);
   }, []);
 
-  // Update time every second
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -93,14 +86,12 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
-  // Monitor for NEW SOS alerts and trigger notifications
   useEffect(() => {
     const sosAlerts = alerts.filter(a => a.status === 'SOS');
     
     sosAlerts.forEach((alert) => {
       const alertId = alert.deviceId + alert.timestamp;
       
-      // Only show notification for NEW alerts (not seen before)
       if (!previousAlertIds.has(alertId)) {
         toast.error(
           `🚨 EMERGENCY ALERT: ${alert.deviceId}\n` +
@@ -122,17 +113,14 @@ function App() {
           }
         );
         
-        // Mark this alert as seen
         setPreviousAlertIds(prev => new Set([...prev, alertId]));
       }
     });
   }, [alerts, previousAlertIds]);
 
-  // Handle alert verification - Find nearest police station and create route
   const handleVerifyAlert = (alert) => {
     if (!alert.coordinates) return;
 
-    // Create unique ID for this specific alert (deviceId + timestamp + coordinates)
     const uniqueAlertId = `${alert.deviceId}_${alert.timestamp}_${alert.coordinates.join('_')}`;
 
     const nearestStation = findNearestPoliceStation(alert.coordinates);
@@ -148,7 +136,7 @@ function App() {
         stationContact: nearestStation.contact,
         distance: nearestStation.distance.toFixed(2),
         deviceId: alert.deviceId,
-        color: getRouteColor(verifiedAlerts.size) // Different color for each route
+        color: getRouteColor(verifiedAlerts.size)
       };
 
       setVerifiedAlerts(prev => new Map(prev).set(uniqueAlertId, routeInfo));
@@ -171,29 +159,26 @@ function App() {
     }
   };
 
-  // Get different route colors for multiple routes
   const getRouteColor = (index) => {
     const colors = [
-      '#ff3864', // Red
-      '#00ff88', // Green
-      '#ffd700', // Gold
-      '#00cfff', // Cyan
-      '#ff6b9d', // Pink
-      '#9d4edd', // Purple
-      '#ff8c00', // Orange
-      '#00ff00', // Lime
+      '#ff3864',
+      '#00ff88',
+      '#ffd700',
+      '#00cfff',
+      '#ff6b9d',
+      '#9d4edd',
+      '#ff8c00',
+      '#00ff00',
     ];
     return colors[index % colors.length];
   };
 
-  // Handle alert removal (when solved)
   const handleRemoveAlert = async (alert) => {
     const uniqueAlertId = `${alert.deviceId}_${alert.timestamp}_${alert.coordinates.join('_')}`;
     
-    // Remove from backend
     try {
       const response = await fetch(
-        `http://13.220.122.72:5000/api/alerts/${encodeURIComponent(alert.deviceId)}/${encodeURIComponent(alert.timestamp)}`,
+        getDeleteAlertUrl(alert.deviceId, alert.timestamp),
         { method: 'DELETE' }
       );
       
@@ -204,12 +189,10 @@ function App() {
       console.log('Could not remove from backend:', error);
     }
     
-    // Remove from frontend state immediately
     setAlerts(prevAlerts => prevAlerts.filter(a => 
       `${a.deviceId}_${a.timestamp}_${a.coordinates.join('_')}` !== uniqueAlertId
     ));
     
-    // Remove from verified routes if it was verified
     setVerifiedAlerts(prev => {
       const newMap = new Map(prev);
       newMap.delete(uniqueAlertId);
@@ -233,23 +216,19 @@ function App() {
     <div className="h-screen bg-midnight-900 p-4 overflow-hidden">
       <div className="h-full grid grid-cols-12 gap-4">
         
-        {/* Sidebar */}
         <div className="col-span-2">
           <Sidebar />
         </div>
 
-        {/* Main Content */}
         <div className="col-span-7 flex flex-col gap-4 min-h-0">
           <Header currentTime={currentTime} />
           <StatsGrid totalNodes={totalNodes} activeAlerts={activeAlerts} />
           
-          {/* Map */}
           <div className="flex-1 min-h-0">
             <MapPanel alerts={alerts} verifiedRoutes={verifiedAlerts} />
           </div>
         </div>
 
-        {/* Right Panel - Alert Feed */}
         <div className="col-span-3 flex flex-col gap-4 min-h-0">
           <AlertsHeader activeAlerts={activeAlerts} totalNodes={totalNodes} />
           <AlertsList 
