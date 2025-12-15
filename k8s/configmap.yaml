@@ -5,8 +5,8 @@ metadata:
   namespace: default
 data:
   # Change this IP when you get new EC2 instance
-  BACKEND_IP: "3.85.12.128"
-  VITE_BACKEND_IP: "3.85.12.128"
+  BACKEND_IP: "44.220.152.89"
+  VITE_BACKEND_IP: "44.220.152.89"
   VITE_BACKEND_PORT: "5000"
   PORT: "5000"
   HOST: "0.0.0.0"
