@@ -1,4 +1,20 @@
 -------------------------------------------------------------------------------
 Test set: com.saaya.SaayaTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.076 s - in com.saaya.SaayaTest
+Tests run: 4, Failures: 4, Errors: 0, Skipped: 0, Time elapsed: 36.163 s <<< FAILURE! - in com.saaya.SaayaTest
+testAlertsEndpoint(com.saaya.SaayaTest)  Time elapsed: 5.041 s  <<< FAILURE!
+java.lang.AssertionError: [FAIL] Alerts endpoint not responding!
+	at com.saaya.SaayaTest.testAlertsEndpoint(SaayaTest.java:33)
+
+testStatsEndpoint(com.saaya.SaayaTest)  Time elapsed: 5.002 s  <<< FAILURE!
+java.lang.AssertionError: [FAIL] Stats endpoint not responding!
+	at com.saaya.SaayaTest.testStatsEndpoint(SaayaTest.java:46)
+
+testHealthResponseStructure(com.saaya.SaayaTest)  Time elapsed: 21.035 s  <<< FAILURE!
+java.lang.AssertionError: Failed to validate health response structure
+	at com.saaya.SaayaTest.testHealthResponseStructure(SaayaTest.java:88)
+
+testBackendIsRunning(com.saaya.SaayaTest)  Time elapsed: 5.007 s  <<< FAILURE!
+java.lang.AssertionError:  CRITICAL: Backend is Down! Deployment Aborted.
+	at com.saaya.SaayaTest.testBackendIsRunning(SaayaTest.java:20)
+
