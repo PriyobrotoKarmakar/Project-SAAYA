@@ -2,9 +2,11 @@
 
 ### Women's Safety IoT Platform with Real-Time Emergency Response
 
-<div align="center">
+> **⚠️ VIEWING ONLY NOTICE**  
+> This repository is for **viewing purposes only**.  
+> No copying, forking, modification, or redistribution is permitted without explicit permission.
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+<div align="center">
 ![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)
 ![React](https://img.shields.io/badge/react-18.3.1-61DAFB.svg)
 ![Docker](https://img.shields.io/badge/docker-ready-2496ED.svg)
@@ -1140,7 +1142,8 @@ Contributions are welcome! Please follow these guidelines:
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This repository is for **viewing purposes only**.  
+No copying, forking, modification, or redistribution is permitted without explicit permission.
 
 ---
 
