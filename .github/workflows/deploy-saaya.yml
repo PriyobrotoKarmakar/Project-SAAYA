@@ -1,0 +1,79 @@
+name: Build, Test, and Deploy Saaya
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      
+      - name: Set up JDK 17 (For Maven QA)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+    
+      - name: Create Frontend .env
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > frontend/.env
+
+      
+      - name: Build Backend Image
+        run: |
+          cd backend
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/saaya-backend:latest .
+
+      - name: Start Backend Container (QA Server)
+        run: |
+          docker rm -f saaya-qa-server || true
+          docker run -d -p 5000:5000 --name saaya-qa-server ${{ secrets.DOCKER_USERNAME }}/saaya-backend:latest
+          
+          echo "Waiting for backend to initialize..."
+          sleep 10
+
+      
+      - name: Build Frontend Image
+        run: |
+          cd frontend
+   
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/saaya-frontend:latest .
+          
+         
+          rm -f .env
+
+      
+      - name: Maven Quality Gate
+        run: |
+          cd qa-suite
+          mvn test
+
+     
+      - name: Login to Docker Hub
+        if: success() 
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push Images
+        if: success()
+        run: |
+          echo "Pushing Backend..."
+          docker push ${{ secrets.DOCKER_USERNAME }}/saaya-backend:latest
+          
+          echo "Pushing Frontend..."
+          docker push ${{ secrets.DOCKER_USERNAME }}/saaya-frontend:latest
+
+      
+      - name: Cleanup Test Container
+        if: always() 
+        run: docker rm -f saaya-qa-server || true
