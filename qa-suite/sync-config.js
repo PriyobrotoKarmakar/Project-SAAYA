@@ -1,23 +1,31 @@
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
+const envPath = path.join(__dirname, "..", ".env");
+const envContent = fs.readFileSync(envPath, "utf8");
 
-const envPath = path.join(__dirname, '..', '.env');
-const envContent = fs.readFileSync(envPath, 'utf8');
+let backendIP = "localhost";
+let backendPort = "5000";
 
-
-let backendIP = 'localhost';
-let backendPort = '5000';
-
-envContent.split('\n').forEach(line => {
-  if (line.startsWith('VITE_BACKEND_IP=')) {
-    backendIP = line.split('=')[1].trim();
+// Check if running in CI environment (GitHub Actions)
+if (process.env.CI === "true") {
+  console.log("🚀 Detected CI Environment. Using localhost for Backend.");
+  backendIP = "localhost";
+} else {
+  // Local Development: Sync from .env
+  try {
+    envContent.split("\n").forEach((line) => {
+      if (line.startsWith("VITE_BACKEND_IP=")) {
+        backendIP = line.split("=")[1].trim();
+      }
+      if (line.startsWith("VITE_BACKEND_PORT=")) {
+        backendPort = line.split("=")[1].trim();
+      }
+    });
+  } catch (err) {
+    console.warn("⚠️ Could not read .env file, using defaults.");
   }
-  if (line.startsWith('VITE_BACKEND_PORT=')) {
-    backendPort = line.split('=')[1].trim();
-  }
-});
-
+}
 
 const javaConfig = `package com.saaya;
 
@@ -32,7 +40,15 @@ public class TestConfig {
 }
 `;
 
-const javaConfigPath = path.join(__dirname, 'src', 'test', 'java', 'com', 'saaya', 'TestConfig.java');
+const javaConfigPath = path.join(
+  __dirname,
+  "src",
+  "test",
+  "java",
+  "com",
+  "saaya",
+  "TestConfig.java",
+);
 fs.writeFileSync(javaConfigPath, javaConfig);
 
-console.log('✅ TestConfig.java updated with BACKEND_IP:', backendIP);
+console.log("✅ TestConfig.java updated with BACKEND_IP:", backendIP);
